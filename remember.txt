@@ -53,3 +53,53 @@ workflows:
 
 *yaha workflow ma humna test requires build isliya kiya ha q ka build honga tu hi test honga 
 ########################################################################################################
+Build test and deploy to Production
+
+
+
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - run: python main.py
+
+
+
+  test:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - run: python tests.py
+
+  
+  deploy:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - run: echo "Deploying to Production Server"
+
+    
+  
+workflows:
+  build_and_test_and_deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+
+              
+########################################################################################################
