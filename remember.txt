@@ -20,3 +20,36 @@ workflows:
 
 
 #######################################################################################################
+Build and test guide
+
+
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - run: python main.py
+
+
+
+  test:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - run: python tests.py
+  
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+
+
+*yaha workflow ma humna test requires build isliya kiya ha q ka build honga tu hi test honga 
+########################################################################################################
